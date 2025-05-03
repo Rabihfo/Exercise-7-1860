@@ -1,0 +1,30 @@
+CHIP DecoderSegment201849171 {
+    IN A, B, C, D;
+    OUT d;
+
+    PARTS:
+    // First term: !A & !C & !D
+    Not(in=A, out=nA);
+    Not(in=C, out=nC);
+    Not(in=D, out=nD);
+    And(a=nA, b=nC, out=t1a);
+    And(a=t1a, b=nD, out=term1);
+
+    // Second term: !A & C & D
+    And(a=nA, b=C, out=t2a);
+    And(a=t2a, b=D, out=term2);
+
+    // Third term: A & !B & C
+    Not(in=B, out=nB);
+    And(a=A, b=nB, out=t3a);
+    And(a=t3a, b=C, out=term3);
+
+    // Fourth term: B & !C & D
+    And(a=B, b=nC, out=t4a);
+    And(a=t4a, b=D, out=term4);
+
+    // OR all terms together
+    Or(a=term1, b=term2, out=or1);
+    Or(a=term3, b=term4, out=or2);
+    Or(a=or1, b=or2, out=d);
+}
