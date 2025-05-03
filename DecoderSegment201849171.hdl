@@ -3,30 +3,35 @@ CHIP DecoderSegment201849171 {
     OUT d;
 
     PARTS:
-    // Invert inputs as needed
+    // Inverters
     Not(in=A, out=nA);
     Not(in=B, out=nB);
     Not(in=C, out=nC);
     Not(in=D, out=nD);
 
-    // Term 1: !B & !D & !A
-    And(a=nB, b=nD, out=t1a);
-    And(a=t1a, b=nA, out=term1);
+    // Term 1: A & !B & !C
+    And(a=A, b=nB, out=t1a);
+    And(a=t1a, b=nC, out=term1);
 
-    // Term 2: !B & C & D
-    And(a=nB, b=C, out=t2a);
+    // Term 2: !A & !B & D
+    And(a=nA, b=nB, out=t2a);
     And(a=t2a, b=D, out=term2);
 
-    // Term 3: B & !C & D
-    And(a=B, b=nC, out=t3a);
-    And(a=t3a, b=D, out=term3);
+    // Term 3: !A & C & !D
+    And(a=nA, b=C, out=t3a);
+    And(a=t3a, b=nD, out=term3);
 
     // Term 4: B & C & !D
     And(a=B, b=C, out=t4a);
     And(a=t4a, b=nD, out=term4);
 
-    // OR all terms together
-    Or(a=term1, b=term2, out=or1);
-    Or(a=term3, b=term4, out=or2);
-    Or(a=or1, b=or2, out=d);
+    // Term 5: !B & C & D
+    And(a=nB, b=C, out=t5a);
+    And(a=t5a, b=D, out=term5);
+
+    // Combine terms
+    Or(a=term1, b=term2, out=o1);
+    Or(a=term3, b=term4, out=o2);
+    Or(a=term5, b=o1, out=o3);
+    Or(a=o2, b=o3, out=d);
 }
