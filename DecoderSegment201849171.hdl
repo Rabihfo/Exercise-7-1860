@@ -3,86 +3,32 @@ CHIP DecoderSegment201849171 {
     OUT d;
 
     PARTS:
-    // Inverters
     Not(in=A, out=nA);
     Not(in=B, out=nB);
     Not(in=C, out=nC);
     Not(in=D, out=nD);
 
-    // Term 1: !A & !B & !C & !D (hex 0)
-    And(a=nA, b=nB, out=t1a);
-    And(a=nC, b=nD, out=t1b);
-    And(a=t1a, b=t1b, out=term1);
+    // Original working terms
+    And(a=nA, b=nC, out=t1);
+    And(a=t1, b=nD, out=term1);
 
-    // Term 2: !A & !B & C & D (hex 3)
-    And(a=nA, b=nB, out=t2a);
-    And(a=C, b=D, out=t2b);
-    And(a=t2a, b=t2b, out=term2);
+    And(a=nA, b=C, out=t2);
+    And(a=t2, b=D, out=term2);
 
-    // Term 3: A & !B & C (hex A)
-    And(a=A, b=nB, out=t3a);
-    And(a=t3a, b=C, out=term3);
+    And(a=A, b=nB, out=t3);
+    And(a=t3, b=C, out=term3);
 
-    // Term 4: B & !C & D (hex 5)
-    And(a=B, b=nC, out=t4a);
-    And(a=t4a, b=D, out=term4);
+    And(a=B, b=nC, out=t4);
+    And(a=t4, b=D, out=term4);
 
-    // Term 5: !B & C & D (hex 2)
-    And(a=nB, b=C, out=t5a);
-    And(a=t5a, b=D, out=term5);
+    // NEW term for 0101 (hex 5): !A & B & !C & D
+    And(a=nA, b=B, out=t5a);
+    And(a=nC, b=D, out=t5b);
+    And(a=t5a, b=t5b, out=term5);
 
-    // Term 6: !A & B & !C & D (hex 6)
-    And(a=nA, b=B, out=t6a);
-    And(a=nC, b=D, out=t6b);
-    And(a=t6a, b=t6b, out=term6);
-
-    // Term 7: !A & B & C & !D (hex 5)
-    And(a=nA, b=B, out=t7a);
-    And(a=C, b=nD, out=t7b);
-    And(a=t7a, b=t7b, out=term7);
-
-    // Term 8: A & !B & !C & !D (hex 8)
-    And(a=A, b=nB, out=t8a);
-    And(a=nC, b=nD, out=t8b);
-    And(a=t8a, b=t8b, out=term8);
-
-    // Term 9: A & !B & !C & D (hex 9)
-    And(a=A, b=nB, out=t9a);
-    And(a=nC, b=D, out=t9b);
-    And(a=t9a, b=t9b, out=term9);
-
-    // Term 10: A & !B & C & !D (hex A)
-    And(a=A, b=nB, out=t10a);
-    And(a=C, b=nD, out=t10b);
-    And(a=t10a, b=t10b, out=term10);
-
-    // Term 11: A & !B & C & D (hex B)
-    And(a=A, b=nB, out=t11a);
-    And(a=C, b=D, out=t11b);
-    And(a=t11a, b=t11b, out=term11);
-
-    // Term 12: A & B & !C & !D (hex C)
-    And(a=A, b=B, out=t12a);
-    And(a=nC, b=nD, out=t12b);
-    And(a=t12a, b=t12b, out=term12);
-
-    // Term 13: A & B & !C & D (hex D)
-    And(a=A, b=B, out=t13a);
-    And(a=nC, b=D, out=t13b);
-    And(a=t13a, b=t13b, out=term13);
-
-    // Combine all terms
+    // Combine all
     Or(a=term1, b=term2, out=o1);
     Or(a=term3, b=term4, out=o2);
-    Or(a=term5, b=term6, out=o3);
-    Or(a=term7, b=term8, out=o4);
-    Or(a=term9, b=term10, out=o5);
-    Or(a=term11, b=term12, out=o6);
-    Or(a=term13, b=o1, out=o7);
-
-    Or(a=o2, b=o3, out=o8);
-    Or(a=o4, b=o5, out=o9);
-    Or(a=o6, b=o7, out=o10);
-    Or(a=o8, b=o9, out=o11);
-    Or(a=o10, b=o11, out=d);
+    Or(a=o1, b=o2, out=o3);
+    Or(a=o3, b=term5, out=d);
 }
