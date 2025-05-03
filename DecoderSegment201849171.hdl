@@ -9,29 +9,24 @@ CHIP DecoderSegment201849171 {
     Not(in=C, out=nC);
     Not(in=D, out=nD);
 
-    // Term 1: A & !B & !C
-    And(a=A, b=nB, out=t1a);
-    And(a=t1a, b=nC, out=term1);
+    // Term 1: !A & !C & !D
+    And(a=nA, b=nC, out=t1a);
+    And(a=t1a, b=nD, out=term1);
 
-    // Term 2: !A & !B & D
-    And(a=nA, b=nB, out=t2a);
+    // Term 2: !A & C & D
+    And(a=nA, b=C, out=t2a);
     And(a=t2a, b=D, out=term2);
 
-    // Term 3: !A & C & !D
-    And(a=nA, b=C, out=t3a);
-    And(a=t3a, b=nD, out=term3);
+    // Term 3: A & !B & C
+    And(a=A, b=nB, out=t3a);
+    And(a=t3a, b=C, out=term3);
 
-    // Term 4: B & C & !D
-    And(a=B, b=C, out=t4a);
-    And(a=t4a, b=nD, out=term4);
+    // Term 4: B & !C & D
+    And(a=B, b=nC, out=t4a);
+    And(a=t4a, b=D, out=term4);
 
-    // Term 5: !B & C & D
-    And(a=nB, b=C, out=t5a);
-    And(a=t5a, b=D, out=term5);
-
-    // Combine terms
+    // OR terms together
     Or(a=term1, b=term2, out=o1);
     Or(a=term3, b=term4, out=o2);
-    Or(a=term5, b=o1, out=o3);
-    Or(a=o2, b=o3, out=d);
+    Or(a=o1, b=o2, out=d);
 }
