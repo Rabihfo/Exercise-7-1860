@@ -8,27 +8,23 @@ CHIP DecoderSegment201849171 {
     Not(in=C, out=nC);
     Not(in=D, out=nD);
 
-    // Original working terms
+    // Working terms
     And(a=nA, b=nC, out=t1);
-    And(a=t1, b=nD, out=term1);
+    And(a=t1, b=nD, out=term1);  // hex 0
 
     And(a=nA, b=C, out=t2);
-    And(a=t2, b=D, out=term2);
+    And(a=t2, b=D, out=term2);  // hex 3
 
-    And(a=A, b=nB, out=t3);
-    And(a=t3, b=C, out=term3);
+    And(a=nC, b=D, out=t3a);
+    And(a=t3a, b=nA, out=term3);  // hex 2
 
-    And(a=B, b=nC, out=t4);
-    And(a=t4, b=D, out=term4);
-
-    // NEW term for 0101 (hex 5): !A & B & !C & D
-    And(a=nA, b=B, out=t5a);
-    And(a=nC, b=D, out=t5b);
-    And(a=t5a, b=t5b, out=term5);
+    // NEW: hex 5: !A & B & !C & D
+    And(a=nA, b=B, out=t4a);
+    And(a=nC, b=D, out=t4b);
+    And(a=t4a, b=t4b, out=term4);  // hex 5
 
     // Combine all
     Or(a=term1, b=term2, out=o1);
     Or(a=term3, b=term4, out=o2);
-    Or(a=o1, b=o2, out=o3);
-    Or(a=o3, b=term5, out=d);
+    Or(a=o1, b=o2, out=d);
 }
